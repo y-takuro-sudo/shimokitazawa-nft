@@ -87,29 +87,35 @@ const Header = memo(() => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <motion.div
-          initial={false}
-          animate={{
-            height: isMobileMenuOpen ? 'auto' : 0,
-            opacity: isMobileMenuOpen ? 1 : 0,
-          }}
-          className="md:hidden overflow-hidden"
-        >
-          <div className="py-4 space-y-4 border-t border-purple-500/20">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block font-[Space_Grotesk] text-gray-300 hover:text-purple-400 transition-colors"
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-        </motion.div>
       </div>
+
+      {/* Mobile Menu - 全画面オーバーレイ */}
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: isMobileMenuOpen ? 1 : 0,
+          pointerEvents: isMobileMenuOpen ? 'auto' : 'none',
+        }}
+        transition={{ duration: 0.2 }}
+        className="md:hidden fixed inset-0 top-16 z-50 bg-slate-950"
+        style={{
+          /* GPU強制: Safari対策 */
+          transform: 'translate3d(0, 0, 0)',
+        }}
+      >
+        <nav className="flex flex-col items-center justify-center h-full gap-8 px-4">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-[Orbitron] text-2xl text-white hover:text-purple-400 transition-colors"
+            >
+              {item.name}
+            </a>
+          ))}
+        </nav>
+      </motion.div>
     </motion.header>
   )
 })
