@@ -6,7 +6,7 @@ const Hero = () => {
   const [isHovering, setIsHovering] = useState(false)
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-16 md:pt-20">
+    <section id="top" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-16 md:pt-20">
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 -left-20 w-72 h-72 md:w-96 md:h-96 bg-purple-600/30 rounded-full blur-[100px] animate-blob" />

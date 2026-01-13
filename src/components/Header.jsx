@@ -35,6 +35,7 @@ const Header = memo(() => {
   }, [isMobileMenuOpen])
 
   const navItems = [
+    { name: 'TOP', href: '#top' },
     { name: 'About', href: '#about' },
     { name: 'Roadmap', href: '#roadmap' },
     { name: 'JOIN US', href: '#join' },
