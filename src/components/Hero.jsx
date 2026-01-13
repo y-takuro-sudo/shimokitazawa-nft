@@ -105,7 +105,7 @@ const Hero = () => {
         >
           {[
             { label: 'MAX SUPPLY', value: '114' },
-            { label: 'MINT PRICE', value: '0.5 SOL' },
+            { label: 'MINT PRICE', value: '0.1 SOL' },
             { label: 'Unique Beasts', value: 'Coming Soon' },
           ].map((stat, index) => (
             <motion.div
