@@ -1,9 +1,46 @@
-import { memo } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 const AuroraBackground = memo(() => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // モバイルでは軽量版を表示
+  if (isMobile) {
+    return (
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none z-0"
+        style={{
+          /* GPU強制: Safari対策 */
+          transform: 'translate3d(0, 0, 0)'
+        }}
+      >
+        {/* モバイル用: 静的なグラデーション背景（アニメーションなし） */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at 30% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(79, 70, 229, 0.1) 0%, transparent 50%)'
+          }}
+        />
+      </div>
+    )
+  }
+
+  // PC用: フルアニメーション
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div
+      className="fixed inset-0 overflow-hidden pointer-events-none z-0"
+      style={{
+        /* GPU強制: Safari対策 */
+        transform: 'translate3d(0, 0, 0)'
+      }}
+    >
       {/* Large rotating gradient orb 1 */}
       <motion.div
         animate={{
@@ -15,6 +52,7 @@ const AuroraBackground = memo(() => {
           scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' }
         }}
         className="absolute -top-1/2 -left-1/2 w-full h-full"
+        style={{ willChange: 'transform' }}
       >
         <div
           className="w-full h-full blur-[100px]"
@@ -35,6 +73,7 @@ const AuroraBackground = memo(() => {
           scale: { duration: 10, repeat: Infinity, ease: 'easeInOut' }
         }}
         className="absolute -bottom-1/2 -right-1/2 w-full h-full"
+        style={{ willChange: 'transform' }}
       >
         <div
           className="w-full h-full blur-[120px]"
@@ -56,6 +95,7 @@ const AuroraBackground = memo(() => {
           ease: 'easeInOut'
         }}
         className="absolute top-1/4 left-0 right-0 h-64 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent blur-3xl"
+        style={{ willChange: 'transform, opacity' }}
       />
 
       <motion.div
@@ -70,6 +110,7 @@ const AuroraBackground = memo(() => {
           delay: 2
         }}
         className="absolute top-2/3 left-0 right-0 h-64 bg-gradient-to-r from-transparent via-emerald-500/10 to-transparent blur-3xl"
+        style={{ willChange: 'transform, opacity' }}
       />
 
       {/* Pulsing center glow */}
@@ -85,7 +126,8 @@ const AuroraBackground = memo(() => {
         }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent)'
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent)',
+          willChange: 'transform, opacity'
         }}
       />
     </div>

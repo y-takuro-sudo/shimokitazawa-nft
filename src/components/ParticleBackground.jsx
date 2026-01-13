@@ -1,31 +1,24 @@
-import { useEffect, useRef, useState, memo } from 'react'
+import { useEffect, useRef, memo } from 'react'
 
 const ParticleBackground = memo(() => {
   const canvasRef = useRef(null)
-  const [isVisible, setIsVisible] = useState(true)
+  const animationRef = useRef(null)
+  const isVisibleRef = useRef(true)
+  const particlesRef = useRef([])
 
-  // IntersectionObserver: 画面外でアニメーション停止
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0 }
-    )
-    observer.observe(canvas)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas || !isVisible) return
-
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    let animationFrameId
-    let particles = []
+    // モバイル判定（Safari対策）
+    const isMobile = window.innerWidth <= 768
+    // モバイルではパーティクル数を大幅削減
+    const particleDensity = isMobile ? 80000 : 20000
+    // モバイルでは接続線を無効化
+    const enableConnections = !isMobile
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -33,11 +26,12 @@ const ParticleBackground = memo(() => {
     }
 
     const createParticles = () => {
-      particles = []
-      const particleCount = Math.floor((canvas.width * canvas.height) / 20000)
+      particlesRef.current = []
+      // モバイルではパーティクル数を1/4に削減
+      const particleCount = Math.floor((canvas.width * canvas.height) / particleDensity)
 
       for (let i = 0; i < particleCount; i++) {
-        particles.push({
+        particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 2 + 0.5,
@@ -51,43 +45,46 @@ const ParticleBackground = memo(() => {
     }
 
     const drawParticles = () => {
+      // 画面外ではアニメーション停止（DOMは維持）
+      if (!isVisibleRef.current) {
+        animationRef.current = requestAnimationFrame(drawParticles)
+        return
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const particles = particlesRef.current
 
       particles.forEach((particle, index) => {
-        // Update position
         particle.x += particle.speedX
         particle.y += particle.speedY
         particle.pulse += 0.02
 
-        // Wrap around edges
         if (particle.x < 0) particle.x = canvas.width
         if (particle.x > canvas.width) particle.x = 0
         if (particle.y < 0) particle.y = canvas.height
         if (particle.y > canvas.height) particle.y = 0
 
-        // Pulsing opacity
         const pulseOpacity = particle.opacity * (0.5 + 0.5 * Math.sin(particle.pulse))
 
-        // Draw particle
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fillStyle = particle.color
         ctx.globalAlpha = pulseOpacity
         ctx.fill()
 
-        // Draw connections to nearby particles (limit to avoid performance issues)
-        if (index < 50) {
-          particles.slice(index + 1, index + 20).forEach(otherParticle => {
+        // 接続線（PCのみ、モバイルでは無効）
+        if (enableConnections && index < 30) {
+          particles.slice(index + 1, index + 10).forEach(otherParticle => {
             const dx = particle.x - otherParticle.x
             const dy = particle.y - otherParticle.y
             const distance = Math.sqrt(dx * dx + dy * dy)
 
-            if (distance < 100) {
+            if (distance < 80) {
               ctx.beginPath()
               ctx.moveTo(particle.x, particle.y)
               ctx.lineTo(otherParticle.x, otherParticle.y)
               ctx.strokeStyle = particle.color
-              ctx.globalAlpha = (1 - distance / 100) * 0.1
+              ctx.globalAlpha = (1 - distance / 80) * 0.08
               ctx.lineWidth = 0.5
               ctx.stroke()
             }
@@ -96,8 +93,17 @@ const ParticleBackground = memo(() => {
       })
 
       ctx.globalAlpha = 1
-      animationFrameId = requestAnimationFrame(drawParticles)
+      animationRef.current = requestAnimationFrame(drawParticles)
     }
+
+    // IntersectionObserver: 画面外判定（コンポーネントは維持、アニメのみ停止）
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+    observer.observe(canvas)
 
     const handleResize = () => {
       resizeCanvas()
@@ -111,16 +117,22 @@ const ParticleBackground = memo(() => {
     window.addEventListener('resize', handleResize)
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
+      cancelAnimationFrame(animationRef.current)
       window.removeEventListener('resize', handleResize)
+      observer.disconnect()
     }
-  }, [isVisible])
+  }, [])
 
   return (
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      style={{
+        opacity: 0.6,
+        /* GPU強制: Safari対策 */
+        transform: 'translate3d(0, 0, 0)',
+        willChange: 'transform'
+      }}
     />
   )
 })

@@ -1,23 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X, Hexagon } from 'lucide-react'
 
-const Header = () => {
+const Header = memo(() => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+
+    checkMobile()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', checkMobile)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   const navItems = [
     { name: 'About', href: '#about' },
     { name: 'Roadmap', href: '#roadmap' },
-    { name: 'JOIN US', href: '#join' },
   ]
 
   return (
@@ -27,9 +34,16 @@ const Header = () => {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-slate-950/80 backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-purple-500/10'
+          ? isMobile
+            ? 'bg-slate-950/95 border-b border-purple-500/20' /* モバイル: backdrop-filter無効化 */
+            : 'bg-slate-950/80 backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-purple-500/10'
           : 'bg-transparent'
       }`}
+      style={{
+        /* GPU強制: Safari対策 */
+        transform: 'translate3d(0, 0, 0)',
+        willChange: 'transform'
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -97,6 +111,6 @@ const Header = () => {
       </div>
     </motion.header>
   )
-}
+})
 
 export default Header
