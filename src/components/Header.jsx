@@ -25,6 +25,7 @@ const Header = memo(() => {
   const navItems = [
     { name: 'About', href: '#about' },
     { name: 'Roadmap', href: '#roadmap' },
+    { name: 'JOIN US', href: '#join' },
   ]
 
   return (
