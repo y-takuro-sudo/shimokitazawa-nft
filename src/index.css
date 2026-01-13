@@ -1,0 +1,327 @@
+@import "tailwindcss";
+
+/* Custom Fonts */
+@theme {
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: #020617;
+  color: white;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Glitch Effect Animation */
+@keyframes glitch {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 255, 0.75),
+                 -0.025em -0.05em 0 rgba(0, 255, 255, 0.75),
+                 0.025em 0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 255, 0.75),
+                 -0.025em -0.05em 0 rgba(0, 255, 255, 0.75),
+                 0.025em 0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 255, 0.75),
+                 0.025em 0.025em 0 rgba(0, 255, 255, 0.75),
+                 -0.05em -0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 255, 0.75),
+                 0.025em 0.025em 0 rgba(0, 255, 255, 0.75),
+                 -0.05em -0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 255, 0.75),
+                 0.05em 0 0 rgba(0, 255, 255, 0.75),
+                 0 -0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 255, 0.75),
+                 0.05em 0 0 rgba(0, 255, 255, 0.75),
+                 0 -0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(255, 0, 255, 0.75),
+                 -0.025em -0.025em 0 rgba(0, 255, 255, 0.75),
+                 -0.025em -0.05em 0 rgba(255, 255, 0, 0.75);
+  }
+}
+
+.glitch {
+  animation: glitch 500ms infinite;
+}
+
+/* Neon Glow */
+.neon-text {
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #a855f7,
+    0 0 30px #a855f7,
+    0 0 40px #a855f7,
+    0 0 55px #a855f7;
+}
+
+/* Background blob animation */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  75% {
+    transform: translate(30px, 10px) scale(1.05);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Button glow effect */
+.btn-glow {
+  box-shadow: 
+    0 0 5px rgba(168, 85, 247, 0.5),
+    0 0 20px rgba(168, 85, 247, 0.3),
+    0 0 40px rgba(168, 85, 247, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-glow:hover {
+  box-shadow: 
+    0 0 10px rgba(168, 85, 247, 0.8),
+    0 0 30px rgba(168, 85, 247, 0.5),
+    0 0 60px rgba(168, 85, 247, 0.3);
+}
+
+/* Scanline effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* Custom Gradients */
+.bg-gradient-conic {
+  background: conic-gradient(var(--tw-gradient-stops));
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(var(--tw-gradient-stops));
+}
+
+/* Enhanced Glitch Effect */
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  10% { transform: skew(-2deg); }
+  20% { transform: skew(2deg); }
+  30% { transform: skew(0deg); }
+  100% { transform: skew(0deg); }
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-2px, 2px);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(2px, -2px);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(2px, -2px);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+    transform: translate(-2px, 2px);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-anim2 {
+  0% {
+    clip-path: inset(65% 0 5% 0);
+    transform: translate(2px, -2px);
+  }
+  20% {
+    clip-path: inset(10% 0 85% 0);
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    clip-path: inset(50% 0 30% 0);
+    transform: translate(2px, -2px);
+  }
+  60% {
+    clip-path: inset(70% 0 15% 0);
+    transform: translate(-2px, 2px);
+  }
+  80% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(2px, -2px);
+  }
+  100% {
+    clip-path: inset(45% 0 40% 0);
+    transform: translate(0);
+  }
+}
+
+.glitch-hover {
+  position: relative;
+}
+
+.glitch-hover::before,
+.glitch-hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-hover:hover::before {
+  animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  color: #0ff;
+  opacity: 0.8;
+  z-index: -1;
+}
+
+.glitch-hover:hover::after {
+  animation: glitch-anim2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+  color: #f0f;
+  opacity: 0.8;
+  z-index: -2;
+}
+
+.glitch-hover:hover {
+  animation: glitch-skew 0.5s infinite;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #a855f7, #6366f1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #c084fc, #818cf8);
+}
+
+/* Button Glitch Hover Effect */
+@keyframes glitch-1 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(3px); }
+  40% { transform: translateX(-3px); }
+  60% { transform: translateX(2px); }
+  80% { transform: translateX(-2px); }
+}
+
+@keyframes glitch-noise {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-1px, 1px); }
+  20% { transform: translate(1px, -1px); }
+  30% { transform: translate(-1px, -1px); }
+  40% { transform: translate(1px, 1px); }
+  50% { transform: translate(-1px, 0); }
+  60% { transform: translate(1px, 0); }
+  70% { transform: translate(0, 1px); }
+  80% { transform: translate(0, -1px); }
+  90% { transform: translate(1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes glitch-text-anim {
+  0%, 100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+  }
+  40% {
+    transform: translate(2px, -1px);
+    text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+  }
+  60% {
+    transform: translate(-1px, -1px);
+    text-shadow: 1px 0 #ff00ff, -1px 0 #00ffff;
+  }
+  80% {
+    transform: translate(1px, 1px);
+    text-shadow: -1px 0 #ff00ff, 1px 0 #00ffff;
+  }
+}
+
+.animate-glitch-1 {
+  animation: glitch-1 0.15s infinite;
+}
+
+.animate-glitch-2 {
+  animation: glitch-2 0.15s infinite;
+  animation-delay: 0.05s;
+}
+
+.animate-glitch-text {
+  animation: glitch-text-anim 0.2s infinite;
+}
